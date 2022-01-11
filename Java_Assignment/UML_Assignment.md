@@ -11,7 +11,7 @@
 In a university there are various departments. A department has a name and is associated to classrooms and offices. An employee working at the university has a unique Id and can be a professor or an instructor. A professor can be a full professor, associate professor, or assistant professor and he/she belongs to a department in the university. Offices and classrooms also have unique IDs and classrooms have fixed number of seats. Also, every employee is assigned an office.
 
 
-![Blank diagram](https://user-images.githubusercontent.com/66563130/148816386-32d3d566-9ea2-485c-b9af-85fb771fe6b5.png)
+![Q2](https://user-images.githubusercontent.com/66563130/148931187-09f48f92-7d5a-4405-a691-945b48bcbe17.png)
 
 
 3. Draw an activity diagram for the given scenario where a student needs to enrol with the university for the given course. Process for student enrolment in the university is as follows:
