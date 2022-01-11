@@ -24,7 +24,7 @@ In a university there are various departments. A department has a name and is as
  - The registrar asks the student to pay for the initial tuition.
 
 
-![Blank diagram (1)](https://user-images.githubusercontent.com/66563130/148816672-8a99c0d6-30c4-4a22-a2ea-157c333fddd4.png)
+![Q3](https://user-images.githubusercontent.com/66563130/148931757-f6cdea16-7ad8-4a85-aaf9-7a0988d87cdb.png)
 
 
 4. A scenario of Online Library Management System is given below. You need to refer the use case diagram and moving further need to create a sequence diagram for the same.
