@@ -43,14 +43,16 @@ public class Employee {
     int id;
     String name,dep;
     double sal;
-    public emp(int id, String name, String dep, double sal) 
+    public Employee(int id, String name, String dep, double sal) 
     {
         super();
         this.id = id;
         this.name = name;
         this.dep = dep;
     }
-    System.out.println(id+" "+name+" "+dep+" "+sal);
+    public void Displaydetails() {
+    	System.out.println(id+" "+name+" "+dep+" "+sal);
+    }
 }
 
 ```
