@@ -113,11 +113,6 @@ public class Swap {
 			a[i] = a[j];
 			a[j] = t;
 		}
-
-		public static final <T> void swap (List<T> l, int i, int j) {
-				Collections.<T>swap(l, i, j);
-		}
-		
 		private static void test() {
 				String [] arr = {"My", "Name", "Is", "Subham"};
 				System.out.println("Original Array: "+Arrays.toString(arr));
