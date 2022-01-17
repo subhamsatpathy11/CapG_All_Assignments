@@ -2,20 +2,21 @@
 
 1. Given a Tree Map<Long, Contact> which has phone numbers for keys and contact objects for values.
 
-Write solutions to
+ Write solutions to
 
  - Fetch all the keys and print them,
  - Fetch all the values and print them
  - Print all key-value pairs
 
-Note:
+ Note:
 
  - Contacts should be stored in descending order of phone number
  - Contact Class:
-  - PhoneNumer: <long>
-  - Name: <String>
-  - Email: <String>
-  - Gender: <Enum>
+ 
+    PhoneNumer: <long>
+    Name: <String>
+    Email: <String>
+    Gender: <Enum>
   
 ```java
 ```
