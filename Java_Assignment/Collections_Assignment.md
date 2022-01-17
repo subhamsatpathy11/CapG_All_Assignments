@@ -17,19 +17,19 @@ Note:
   - Email: <String>
   - Gender: <Enum>
   
-  ```java
-  ```
+```java
+```
   Output:
   
-  ```
-  ```
+```
+```
   
-  2. Write an application to store 10 unique product objects. In case there is an attempt to add a duplicate product, it should be silently rejected.
+2. Write an application to store 10 unique product objects. In case there is an attempt to add a duplicate product, it should be silently rejected.
   
-  ```java
-  //class name - Function
+```java
+//class name - Function
   
-  public class Function implements Comparable<Function> 
+public class Function implements Comparable<Function> 
 {
 	
 	private String product_name;
@@ -73,4 +73,325 @@ Note:
 	}
 	
 }
-  ```
+```
+```java
+//class name - Duplicate
+
+import java.util.TreeSet;
+
+public class Duplicate {
+
+	public static void main(String[] args) {
+		
+		TreeSet<Function> func = new TreeSet<>();
+		
+		func.add(new Function("iPhone",1));
+		func.add(new Function("Samsung",2));
+		func.add(new Function("Motorola",3));
+		//adding a duplicate product name
+		func.add(new Function("iPhone",4));
+		//adding a duplicate product ID
+		func.add(new Function("OnePlus",2));
+		func.add(new Function("Redmi",5));
+		
+		for(Function f : func)
+		{
+			System.out.println(f);
+		}
+		
+	}
+
+}
+
+```
+Output:
+	
+```
+Redmi - 5
+iPhone - 4
+Motorola - 3
+Samsung - 2
+iPhone - 1
+```
+
+3. Store atleast 10 Employee objects in a TreeSet<Employee>. When your application runs the user should be asked to selct one of the options upon which you will print the employee details in a sorted manner.
+	
+```java
+//class name - Options
+
+
+public class Options {
+	
+	private int id;
+	private int salary;
+	private String name;
+	private String department;
+	
+	public Options(int id, int salary, String name, String department)
+	{
+		this.id = id;
+		this.salary = salary;
+		this.name = name;
+		this.department = department;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	public String getDep()
+	{
+		return department;
+	}
+	public void setDep(String department)
+	{
+		this.department = department;
+	}
+	
+	public int getId()
+	{
+		return id;
+	}
+	public int getSalary()
+	{
+		return salary;
+	}
+
+}
+
+```
+
+```java
+//class name - IdCompare
+	
+import java.util.Comparator;
+
+public class IdCompare implements Comparator<Options>
+{
+	
+	public int compare(Options o1, Options o2)
+	{
+		return o1.getId() - o2.getId();
+	}
+
+}
+
+```
+	
+```java
+//class name - NameCompare
+	
+import java.util.Comparator;
+
+public class NameCompare implements Comparator<Options>
+{
+	
+	public int compare(Options o1, Options o2)
+	{
+		return o1.getName().compareTo(o2.getName());
+	}
+
+}
+
+```
+	
+```java
+//class name - DepComapre
+	
+import java.util.Comparator;
+
+public class DepComapre implements Comparator<Options>
+{
+	
+	public int compare(Options o1, Options o2)
+	{
+		return o1.getDep().compareTo(o2.getDep());
+	}
+
+}
+
+```
+	
+```java
+//class name - SalaryCompare
+	
+import java.util.Comparator;
+
+public class SalaryCompare implements Comparator<Options>{
+
+	public int compare(Options o1, Options o2)
+	{
+		return o1.getSalary() - o2.getSalary();
+	}
+	
+}
+
+```
+```java
+//class name - TestCompare
+	
+import java.util.*;
+
+public class TestCompare {
+
+	public static void main(String[] args) {
+		
+		Scanner scan = new Scanner(System.in);
+		System.out.println("You want to sort in order of \n\n1.ID\n2.Name\n3.Department\n4.Salary\n\nEnter your option: ");
+		int option = scan.nextInt();
+		
+		switch(option)
+		{
+		case 1:
+			TreeSet<Options> set = new TreeSet<Options>(new IdCompare());
+			
+			set.add(new Options(1,23000,"Subhasish","A"));
+			set.add(new Options(2,32000,"Vedant","C"));
+			set.add(new Options(3,13000,"Subham","F"));
+			
+			System.out.println(" Increasing Order with the Id : ");
+			
+			for(Options o : set)
+			{
+				System.out.print(o.getId()+","+o.getName()+","+o.getDep()+","+o.getSalary());
+				System.out.println();
+			}
+			
+			break;
+			
+		case 2:
+			TreeSet<Options> setN = new TreeSet<Options>(new NameCompare());
+			
+			setN.add(new Options(1,23000,"Subhasish","A"));
+			setN.add(new Options(2,32000,"Vedant","C"));
+			setN.add(new Options(3,13000,"Subham","F"));
+			
+			System.out.println(" Increasing Order with the Name : ");
+			
+			for(Options o : setN)
+			{
+				System.out.print(o.getId()+","+o.getName()+","+o.getDep()+","+o.getSalary());
+				System.out.println();
+			}
+			
+			break;
+		
+		case 3:
+			TreeSet<Options> setD = new TreeSet<Options>(new DepComapre());
+			
+			setD.add(new Options(1,23000,"Subhasish","A"));
+			setD.add(new Options(2,32000,"Vedant","C"));
+			setD.add(new Options(3,13000,"Subham","F"));
+			
+			System.out.println(" Increasing Order with the Department : ");
+			
+			for(Options o : setD)
+			{
+				System.out.print(o.getId()+","+o.getName()+","+o.getDep()+","+o.getSalary());
+				System.out.println();
+			}
+			
+			break;
+			
+		case 4:
+			TreeSet<Options> setS = new TreeSet<Options>(new SalaryCompare());
+			
+			setS.add(new Options(1,23000,"Subhasish","A"));
+			setS.add(new Options(2,32000,"Vedant","C"));
+			setS.add(new Options(3,13000,"Subham","F"));
+			
+			System.out.println(" Increasing Order with the Salary : ");
+			
+			for(Options o : setS)
+			{
+				System.out.print(o.getId()+","+o.getName()+","+o.getDep()+","+o.getSalary());
+				System.out.println();
+			}
+			
+			break;
+		
+		}
+		
+		
+	}
+
+}
+```
+
+Output:
+	
+```
+You want to sort in order of 
+
+1.ID
+2.Name
+3.Department
+4.Salary
+
+Enter your option: 
+4
+ Increasing Order with the Salary : 
+3,Subham,F,13000
+1,Subhasish,A,23000
+2,Vedant,C,32000
+
+```
+	
+4. Given a Linked List of Objects representing date of birth's (use any inbuild java class to represent date), print the date's along with the message: Your date of Birth is DD-MM-YYYY, and it (was or was not) a leap year.
+
+ - E.g. For the date 23-12-2000
+
+   Your date of birth is 23-12-2000 and it was a leap year
+
+```java
+//class name - LeapYear
+	
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+
+public class LeapYear {
+
+	public static void main(String[] args) {
+		
+		LocalDate date1 = LocalDate.of(2000, 07, 26);
+		LocalDate date2 = LocalDate.of(2017, 11, 7);
+		LocalDate date3 = LocalDate.of(1999, 10, 11);
+		
+		LinkedList<LocalDate> list = new LinkedList<LocalDate>();
+		
+		list.add(date1);
+		list.add(date2);
+		list.add(date3);
+		
+		for(LocalDate l : list)
+		{
+			String printDate = l.format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
+			
+			if(l.isLeapYear())
+			{
+				System.out.println("Your Date of Birth is " + printDate + " and it was a leap year");
+			}
+			else
+			{
+				System.out.println("Your Date of Birth is " + printDate + " and it was not a leap year");
+			}
+		}
+
+	}
+
+}
+
+```
+	
+Output:
+	
+```
+Your Date of Birth is 26-07-2000 and it was a leap year
+Your Date of Birth is 07-11-2017 and it was not a leap year
+Your Date of Birth is 11-10-1999 and it was not a leap year
+```
