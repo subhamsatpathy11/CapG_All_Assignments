@@ -145,5 +145,49 @@ Swapped Array: [Subham, Name, Is, My]
    myObj.setValue("Hello");
    
 ```java
+import java.util.*;
 
+	    public class Pair {
+	    public static void main(String[] args)
+	     {
+		Map<String,String> map=new HashMap<>();
+             	map.put("Hi", "8");
+		map.put("hello", "9");
+             	System.out.println(map);
+		 
+	     }
+	}
+
+```
+Output:
+```
+{Hi=8, hello=9}
+```
+
+ - Create an object of the class Pair to store String value for the property key and java.util.Date as value for the property value
+
+   myObj setKey("Today Is"); myobl setValue(new java.util.Date());
+
+   Note: In scenario a, no data apart from String should be used for key and value, in scenario b. no data apart from String for key and java.util.Date should be allowed
+   
+```java
+import java.util.*;
+
+	    public class pair1 
+            {
+	     	public static void main(String[] args)
+	        {    
+		  Map<String,Date> map=new HashMap<>();
+		  map.put("Today is", new java.util.Date());
+		  System.out.println(map);
+				
+              	}
+            }
+
+```
+
+Output:
+
+```
+{Today is=Sat Jan 15 21:02:19 IST 2022}
 ```
