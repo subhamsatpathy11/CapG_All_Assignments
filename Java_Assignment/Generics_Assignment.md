@@ -139,7 +139,7 @@ Swapped Array: [Subham, Name, Is, My]
 
  - Create an Object of Pair class to store String value for the property key and String value for the property value. Restriction Apart from String type no other types should be acceptable as Key or value Input
 
- - e.g.
+   e.g.
 
    myObj.setkey("1"); 
    myObj.setValue("Hello");
@@ -166,7 +166,8 @@ Output:
 
  - Create an object of the class Pair to store String value for the property key and java.util.Date as value for the property value
 
-   myObj setKey("Today Is"); myobl setValue(new java.util.Date());
+   myObj setKey("Today Is"); 
+   myobl setValue(new java.util.Date());
 
    Note: In scenario a, no data apart from String should be used for key and value, in scenario b. no data apart from String for key and java.util.Date should be allowed
    
