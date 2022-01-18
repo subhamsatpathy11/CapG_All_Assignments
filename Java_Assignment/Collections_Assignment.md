@@ -19,10 +19,122 @@
     Gender: <Enum>
   
 ```java
+//class name Tree1
+	
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import tree.contact.gender;
+public class Tree1 {
+	public static void main(String[] args)
+	{
+		Map<Long,Contact> map=new TreeMap<Long,Contact>();
+		Contact c1=new Contact((long)89034567,"ram","ram@.com",gender.m);
+		Contact c2=new Contact((long)12345679,"raj","raj@.com",gender.m);
+		Contact c3=new Contact((long)67864747,"sam","sam@.com",gender.Fe);
+		Contact c4=new Contact((long)45754757,"tom","tom@.com",gender.m);
+		map.put((long)89034567, c1);
+		map.put((long)12345679, c2);
+		map.put((long)67864747, c3);
+		map.put((long)45754757, c4);
+		 for(Map.Entry<Long, Contact> entry:map.entrySet()){  
+			 Long key=entry.getKey();  
+		        Contact c=entry.getValue();  
+		        System.out.println(key+" Details:");  
+		        System.out.println(c.phoneno+" "+c.name+" "+c.email+" "+c.g);  
+		 }
+		 System.out.println("............");
+		 System.out.println("After Sorted:");
+		        Map<Long,Contact> sortedMapDesc = new TreeMap<>(
+		                Collections.reverseOrder());
+		        sortedMapDesc.putAll(map);
+		        for(Map.Entry<Long,Contact> entry1 : sortedMapDesc.entrySet())
+		        {
+		        	 Long key=entry1.getKey();  
+				        Contact c8=entry1.getValue();  
+				        System.out.println(key+" Details:");
+		        System.out.println(c8.phoneno+" "+c8.name+" "+c8.email+" "+c8.g);  
+		        }     
+		    
+	}
+}
+
+```
+	
+```java
+//class name - Contact
+	
+package tree;
+import java.util.EnumSet;
+
+public class Contact {
+	long phoneno;
+	String name,email;
+	public enum gender {Fe,m}
+	gender g;
+	/**
+	 * @param phoneno
+	 * @param name
+	 * @param email
+	 * @param g
+	 */
+	public Contact(long phoneno, String name, String email, gender g) {
+		super();
+		this.phoneno = phoneno;
+		this.name = name;
+		this.email = email;
+		this.g = g;
+	}
+	public long getPhoneno() {
+		return phoneno;
+	}
+	public void setPhoneno(long phoneno) {
+		this.phoneno = phoneno;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public gender getG() {
+		return g;
+	}
+	public void setG(gender g) {
+		this.g = g;
+	}
+}
+
 ```
   Output:
   
 ```
+12345679 Details:
+12345679 raj raj@.com m
+45754757 Details:
+45754757 tom tom@.com m
+67864747 Details:
+67864747 sam sam@.com Fe
+89034567 Details:
+89034567 ram ram@.com m
+............
+After Sorted:
+89034567 Details:
+89034567 ram ram@.com m
+67864747 Details:
+67864747 sam sam@.com Fe
+45754757 Details:
+45754757 tom tom@.com m
+12345679 Details:
+12345679 raj raj@.com m
+
 ```
   
 2. Write an application to store 10 unique product objects. In case there is an attempt to add a duplicate product, it should be silently rejected.
