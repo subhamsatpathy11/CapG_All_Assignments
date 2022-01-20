@@ -2,9 +2,7 @@
 
 1. Write a program to calculate the Simple Interest with minimal code using features of Java 11.
 
- - Hint Use the concept of functional interface and Local variable syntax for lambda
-
-parameters.
+ - Hint Use the concept of functional interface and Local variable syntax for lambda parameters.
 
 ```java
 package io.sss;
