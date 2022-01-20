@@ -27,6 +27,12 @@ public class SimpleInterest {
 	}
 
 }
+
+interface Interest
+{
+	int calculate(int p, int rate, int time);
+}
+
 ```
 
 Output:
