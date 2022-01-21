@@ -51,13 +51,13 @@ Output:
 Test Annotation
 ```
 
-2. 2.	Build a custom annotation called @Info, which can be used by developers on a class, a property, or a method. The developer can provide the following when using this annotation:
-a.	AuthorId : <<Developers ID>>-(Mandatory Input)
-b.	Author : <<Developer name>>-(Optional Input)
-c.	Supervisor : <<”String Data”>>-(Mandatory Input)
-d.	Date : <<”String Time”>>-(Mandatory Input)
-e.	Time : <<Numerical Version>>-(Mandatory Input)
-f.	Description : <<Description of the class, method, or property>>-(Optional Input)
+2. Build a custom annotation called @Info, which can be used by developers on a class, a property, or a method. The developer can provide the following when using this annotation:
+ - AuthorId : <<Developers ID>>-(Mandatory Input)
+ - Author : <<Developer name>>-(Optional Input)
+ - Supervisor : <<”String Data”>>-(Mandatory Input)
+ - Date : <<”String Time”>>-(Mandatory Input)
+ - Time : <<Numerical Version>>-(Mandatory Input)
+ - Description : <<Description of the class, method, or property>>-(Optional Input)
   
 ```java
 package org.annotation.app;
