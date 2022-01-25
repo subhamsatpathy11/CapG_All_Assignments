@@ -660,131 +660,280 @@ circle point2010
 	
 5. Write a program to demonstrate use of @Resource, @inject, @Required annotations
 	
- - @resource
-	
+ - @Required
 ```java
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-  loader=AnnotationConfigContextLoader.class,
-  classes=ApplicationContextTestResourceNameType.class)
-public class FieldResourceInjectionIntegrationTest {
+package assignment5;
 
-    @Resource(name="namedFile")
-    private File defaultFile;
-
-    @Test
-    public void givenResourceAnnotation_WhenOnField_ThenDependencyValid(){
-        assertNotNull(defaultFile);
-        assertEquals("namedFile.txt", defaultFile.getName());
-    }
-}
-@Configuration
-class ApplicationContextTestResourceNameType {
-
-    @Bean(name="namedFile")
-    public File namedFile() {
-        File namedFile = new File("namedFile.txt");
-        return namedFile;
-    }
-}
-```
- - @inject
-	
-```java
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-  loader=AnnotationConfigContextLoader.class,
-  classes=ApplicationContextTestInjectQualifier.class)
-public class FieldQualifierInjectIntegrationTest {
-
-    @Inject
-    private ArbitraryDependency defaultDependency;
-
-    @Inject
-    private ArbitraryDependency namedDependency;
-
-    @Test
-    public void givenInjectQualifier_WhenOnField_ThenDefaultFileValid(){
-        assertNotNull(defaultDependency);
-        assertEquals("Arbitrary Dependency",
-          defaultDependency.toString());
-    }
-
-    @Test
-    public void givenInjectQualifier_WhenOnField_ThenNamedFileValid(){
-        assertNotNull(defaultDependency);
-        assertEquals("Another Arbitrary Dependency",
-          namedDependency.toString());
-    }
-}	
-```
- - We can take a separate example to show how @required works within code implementation
-	
-```java
 import org.springframework.beans.factory.annotation.Required;
 
-public class Student {
-   private Integer age;
-   private String name;
+public class employee {
+	 private String name;    
+	    private String designation;
+	    private String company;
+	 
+	    @Required
+	    public void setName(String name) {
+	        this.name = name;
+	    }
+	    public String getName() {
+	        return name;
+	    }
+	 
+	    @Required
+	    public void setDesignation(String designation) {
+	        this.designation = designation;
+	    }
+	    public String getDesignation() {
+	        return designation;
+	    }
+	 
+	    public void setCompany(String company) {
+	        this.company = company;
+	    }
+	    public String getCompany() {
+	        return company;
+	    }
+	 
+	    @Override
+	    public String toString() {
+	        return "Employee [name=" + name + ", designation=" + designation + ", company=" + company + "]";
+	    }
 
-   @Required
-   public void setAge(Integer age) {
-      this.age = age;
-   }
-   public Integer getAge() {
-      return age;
-   }
-   
-   @Required
-   public void setName(String name) {
-      this.name = name;
-   }
-   public String getName() {
-      return name;
-   }
-}	
+}
 ```
 ```java
+package springrequiredannotation;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class MainApp {
-   public static void main(String[] args) {
-      ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
-      
-      Student student = (Student) context.getBean("student");
-      System.out.println("Name : " + student.getName() );
-      System.out.println("Age : " + student.getAge() );
-   }
-}	
+import assignment5.employee;
+
+public class AppMain {
+	  @SuppressWarnings("resource")
+	    public static void main(String[] args) {        
+	        ApplicationContext ac = new ClassPathXmlApplicationContext("required-annotation.xml");
+	 
+	        employee emp = ac.getBean("myemployee", employee.class);
+	        System.out.println(emp.toString());
+	    }
+
+}
 ```
-	
 ```xml
-<beans xmlns = "http://www.springframework.org/schema/beans"
-   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:context = "http://www.springframework.org/schema/context"
-   xsi:schemaLocation = "http://www.springframework.org/schema/beans
-   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-   http://www.springframework.org/schema/context
-   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-   <context:annotation-config/>
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-   <!-- Definition for student bean -->
-   <bean id = "student" class = "io.fifth.Student">
-      <property name = "name" value = "Zara" />
+	
+	<context:annotation-config />
 
-      <!-- try without passing age and check the result -->
-      <!-- property name = "age"  value = "11"-->
-   </bean>
+	<bean id="myemployee" class="com.spring.pojo.Employee">
+		<!-- Required property -->
+		<property name="name" value="Charlotte O' Neil" />
+		<!-- Required property -->
+		<property name="designation" value="Technical Leader" />
+		<property name="company" value="Test Ltd." />
+	</bean>
+</beans>
 
+```
+
+ - @resource 
+```java
+package com.spring.pojo;
+
+public class Company {
+	 private String name;
+	    private String location;
+	 
+	    public String getName() {
+	        return name;
+	    }
+	    public void setName(String name) {
+	        this.name = name;
+	    }
+	    public String getLocation() {
+	        return location;
+	    }
+	    public void setLocation(String location) {
+	        this.location = location;
+	    }
+	 
+	    @Override
+	    public String toString() {
+	        return "Company [name=" + name + ", location=" + location + "]";
+	    }
+}
+```
+```java
+package com.spring.pojo;
+import javax.annotation.Resource;
+
+
+public class Employee {
+
+    private String id;
+    private String name;
+ 
+    @Resource(name="mycompany")
+    private Company company;
+ 
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public Company getCompany() {
+        return company;
+    }
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+ 
+    @Override
+    public String toString() {
+        return "Employee [id=" + id + ", name=" + name + ", company=" + company.toString() + "]";
+    }
+
+}
+```
+```java
+package com.spring.util;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.spring.pojo.Employee;
+
+public class AppMain {
+	@SuppressWarnings("resource")
+    public static void main(String[] args) {
+ 
+        ApplicationContext ac = new ClassPathXmlApplicationContext("resource-annotation.xml");
+ 
+        Employee emp = ac.getBean("myemployee", Employee.class);
+        System.out.println(emp.toString());
+
+}
+}
+```
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+    <!-- To activate the '@Resource' annotation in the spring framework -->
+    <context:annotation-config />
+ 
+    <bean id="mycompany" class="com.spring.pojo.Company">
+        <property name="name" value="Test Pvt. Ltd." />
+        <property name="location" value="India" />
+    </bean>
+ 
+    <bean id="myemployee" class="com.spring.pojo.Employee">
+        <property name="id" value="123456" />
+        <property name="name" value="Charlotte O' Neil" />
+    </bean>
 </beans>
 ```
-	
-Output:
-	
+ - @insert
+```java
+package com.springexample;
+ 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+ 
+public class RunMyProgram {
+    public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+        StudentHolder studentHolder = (StudentHolder) context.getBean("studentHolder");
+            studentHolder.displayStudentDetails();
+    }
+}
+
 ```
-Property 'age' is required for bean 'student'
+```java
+package com.springexample;
+ 
+import javax.inject.Inject;
+ 
+public class StudentHolder {
+     
+    /* Inject annotation wires the property byType by default */
+    @Inject
+    Student student;
+     
+    public Student getStudent() {
+        return student;
+    }
+ 
+    public void setStudent(Student student) {
+        this.student = student;
+    }   
+     
+    public void displayStudentDetails(){
+        System.out.println("Student Details");
+        System.out.println("---------------");
+        System.out.println("Student No: "+student.getStudentNo());
+        System.out.println("Student Name: "+student.getStudentName());
+    }
+}
+
+```
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+ 
+    <bean id="stu" class="com.springexample.Student">
+        <property name="studentNo" value="1001" />
+        <property name="studentName" value="John Peter" />
+    </bean>
+     
+    <bean id="studentHolder" class="com.springexample.StudentHolder" />
+    <context:annotation-config />
+</beans>
+
+```
+```java
+
+package com.springexample;
+ 
+public class Student {
+    private int studentNo;
+    private String studentName;
+     
+    public int getStudentNo() {
+        return studentNo;
+    }
+    public void setStudentNo(int studentNo) {
+        this.studentNo = studentNo;
+    }
+    public String getStudentName() {
+        return studentName;
+    }
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }   
+}
+
 ```
 
 7. Write a Java program to demonstrate SPEL (Spring Expression language)
