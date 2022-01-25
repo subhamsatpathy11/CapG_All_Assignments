@@ -545,3 +545,146 @@ public class VerifySpringCoreFeature
     }
 }
 ```
+	
+ - @configuration example
+	
+```java
+@Configuration
+public class ApplicationContextTestResourceNameType {
+
+    @Bean(name="namedFile")
+    public File namedFile() {
+        File namedFile = new File("namedFile.txt");
+        return namedFile;
+    }
+}	
+```
+	
+5. Write a program to demonstrate use of @Resource, @inject, @Required annotations
+	
+ - @resource
+	
+```java
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+  loader=AnnotationConfigContextLoader.class,
+  classes=ApplicationContextTestResourceNameType.class)
+public class FieldResourceInjectionIntegrationTest {
+
+    @Resource(name="namedFile")
+    private File defaultFile;
+
+    @Test
+    public void givenResourceAnnotation_WhenOnField_ThenDependencyValid(){
+        assertNotNull(defaultFile);
+        assertEquals("namedFile.txt", defaultFile.getName());
+    }
+}
+@Configuration
+class ApplicationContextTestResourceNameType {
+
+    @Bean(name="namedFile")
+    public File namedFile() {
+        File namedFile = new File("namedFile.txt");
+        return namedFile;
+    }
+}
+```
+ - @inject
+	
+```java
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+  loader=AnnotationConfigContextLoader.class,
+  classes=ApplicationContextTestInjectQualifier.class)
+public class FieldQualifierInjectIntegrationTest {
+
+    @Inject
+    private ArbitraryDependency defaultDependency;
+
+    @Inject
+    private ArbitraryDependency namedDependency;
+
+    @Test
+    public void givenInjectQualifier_WhenOnField_ThenDefaultFileValid(){
+        assertNotNull(defaultDependency);
+        assertEquals("Arbitrary Dependency",
+          defaultDependency.toString());
+    }
+
+    @Test
+    public void givenInjectQualifier_WhenOnField_ThenNamedFileValid(){
+        assertNotNull(defaultDependency);
+        assertEquals("Another Arbitrary Dependency",
+          namedDependency.toString());
+    }
+}	
+```
+ - We can take a separate example to show how @required works within code implementation
+	
+```java
+import org.springframework.beans.factory.annotation.Required;
+
+public class Student {
+   private Integer age;
+   private String name;
+
+   @Required
+   public void setAge(Integer age) {
+      this.age = age;
+   }
+   public Integer getAge() {
+      return age;
+   }
+   
+   @Required
+   public void setName(String name) {
+      this.name = name;
+   }
+   public String getName() {
+      return name;
+   }
+}	
+```
+```java
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class MainApp {
+   public static void main(String[] args) {
+      ApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+      
+      Student student = (Student) context.getBean("student");
+      System.out.println("Name : " + student.getName() );
+      System.out.println("Age : " + student.getAge() );
+   }
+}	
+```
+	
+```xml
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:context = "http://www.springframework.org/schema/context"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+   <context:annotation-config/>
+
+   <!-- Definition for student bean -->
+   <bean id = "student" class = "io.fifth.Student">
+      <property name = "name" value = "Zara" />
+
+      <!-- try without passing age and check the result -->
+      <!-- property name = "age"  value = "11"-->
+   </bean>
+
+</beans>
+```
+	
+Output:
+	
+```
+Property 'age' is required for bean 'student'
+```
