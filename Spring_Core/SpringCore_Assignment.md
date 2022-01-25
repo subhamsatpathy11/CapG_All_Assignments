@@ -196,6 +196,13 @@ public class Test {
 
 Create a class Question with following attributes: questionid, question, answers. There are 3 cases for above program.
 
+ - Write a program where answers is of type List<String> or String[] 	
+ - Write a program where answers is of type Set<String>
+ - Write a program where answers is of type Map<Integer, String>. In case of Map, Integer value represents answer's sequence number.
+ - Create a Test class with main() method, get Question bean from ApplicationContext object and print question and its answers. e. Also write the JUnit Test cases for above program.
+	
+Use XML based configuration.
+
 ```java
 //class name - Question
 
@@ -277,10 +284,7 @@ public void displayMap()
 }  
 ```
 
- - Write a program where answers is of type List<String> or String[] 	
- - Write a program where answers is of type Set<String>
- - Write a program where answers is of type Map<Integer, String>. In case of Map, Integer value represents answer's sequence number.
- - Create a Test class with main() method, get Question bean from ApplicationContext object and print question and its answers. e. Also write the JUnit Test cases for above program.
+
 	
 ```java
 	```java
@@ -355,7 +359,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 ```
 
 	
-Use XML based configuration.
+
 	
 
 	
