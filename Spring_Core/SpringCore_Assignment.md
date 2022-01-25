@@ -688,3 +688,197 @@ Output:
 ```
 Property 'age' is required for bean 'student'
 ```
+
+7. Write a Java program to demonstrate SPEL (Spring Expression language)
+	
+```java
+import org.springframework.expression.Expression;  
+import org.springframework.expression.ExpressionParser;  
+import org.springframework.expression.spel.standard.SpelExpressionParser;  
+  
+public class Test {  
+public static void main(String[] args) {  
+ExpressionParser parser = new SpelExpressionParser();  
+  
+Expression exp = parser.parseExpression("'Hello SPEL'");  
+String message = (String) exp.getValue();  
+System.out.println(message);  
+//OR  
+//System.out.println(parser.parseExpression("'Hello SPEL'").getValue());  
+}  
+}  	
+```
+8. Write a Java program to demonstrate InitializingBean and DisposableBean.
+
+   Try Different ways:
+
+ - (Use init-method and destroy-method in xml config file)
+	
+```java
+package QuestionEight;
+
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
+public class CustomerService implements InitializingBean, DisposableBean {
+	private String msg;
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public void destroy() throws Exception {
+
+		// TODO Auto-generated method stub
+		System.out.println("Spring Container is destroy! Customer clean up");
+	}
+
+	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("Init method after properties are set : " + msg);
+	}}
+	
+```
+```java
+package QuestionEight;
+
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
+public class CustomerService implements InitializingBean, DisposableBean {
+	private String msg;
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public void destroy() throws Exception {
+
+		// TODO Auto-generated method stub
+		System.out.println("Spring Container is destroy! Customer clean up");
+	}
+
+	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("Init method after properties are set : " + msg);
+	}}
+
+```
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+       <bean id="customerService" class="QuestionEight.CustomerService">
+		<property name="msg" value="i'm property message" />
+       </bean>
+		
+</beans>
+
+```
+Output:
+	
+```
+Init method after properties are set : i'm property message
+Spring Container is destroy! Customer clean up
+
+```
+ - (Use @PostConstruct and @PreDestroy)
+	
+```java
+package EightB;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyBean {
+
+	public MyBean() {
+		System.out.println("MyBean instance created");
+	}
+
+	@PostConstruct
+	private void init() {
+		System.out.println("Verifying Resources");
+	}
+
+	@PreDestroy
+	private void shutdown() {
+		System.out.println("Shutdown All Resources");
+	}
+
+	public void close() {
+		System.out.println("Closing All Resources");
+	}
+}
+
+```
+```java
+package EightB;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+@Configuration
+public class MyConfiguration {
+
+	@Bean
+	@Scope(value = "singleton")
+	public MyBean myBean() {
+		return new MyBean();
+	}
+
+}
+
+```
+```java
+package EightB;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class SpringApp {
+
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+		ctx.register(MyConfiguration.class);
+		ctx.refresh();
+
+		MyBean mb1 = ctx.getBean(MyBean.class);
+		System.out.println(mb1.hashCode());
+
+		MyBean mb2 = ctx.getBean(MyBean.class);
+		System.out.println(mb2.hashCode());
+
+		ctx.close();
+	}
+
+}
+	
+```
+	
+Output:
+	
+```
+MyBean instance created
+Verifying Resources
+2145970759
+2145970759
+Shutdown All Resources
+Closing All Resources
+```
+	
