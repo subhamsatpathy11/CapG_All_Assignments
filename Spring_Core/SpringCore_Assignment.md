@@ -192,6 +192,18 @@ public class Test {
 </bean>
 ```
 
+Output:
+
+```
+id:1 name:Mark Zuckerburg Contact:783893
+Customeraddress: 8
+Bhubaneswar
+Odisha
+751003
+India
+
+```
+
 2. Example of Injecting collections (List, Set and Map)
 
 Create a class Question with following attributes: questionid, question, answers. There are 3 cases for above program.
@@ -361,204 +373,290 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	
 4. Example on @Controller, @Service, @Repository, @Autowired, @Configuration and @Bean. Modify the above application, use annotations and java based configuration.
 
- - @repository
-	
+ - @Bean
 ```java
-public interface BankCardDAO {
-    
-    public BankCardDTO insertBankCard(String bankName, String cardNumber, String createDate);
-}	
-```
-```java
-// Annotated this object as a DAO function bean.
-@Repository("bcDao")
-public class BankCardDAOImpl implements BankCardDAO {
-    @Override
-    public BankCardDTO insertBankCard(String bankName, String cardNumber, String createDate) {
-        BankCardDTO ret = new BankCardDTO();
-        ret.setBankName(bankName);
-        ret.setCardNumber(cardNumber);
-        ret.setCreateDate(createDate);
-        
-        System.out.println("Bank card has been inserted by BankCardDAOImpl. Bank name : " + bankName + " , card number : " + cardNumber + " , create date : " + createDate);
-        return ret;
-    }
-}	
-```
-	
- - @Service
-	
-```java
-public interface BankCardManager {
-    public BankCardDTO createBankCard(String bankName, String cardNumber, String createDate);
-    
-}	
-```
-```java
-// Annotated this object as a service bean.
-@Service("bcManager")
-public class BankCardManagerImpl implements BankCardManager {
-    @Autowired
-    private BankCardDAO bankCardDao;
-    
-    @Override
-    public BankCardDTO createBankCard(String bankName, String cardNumber, String createDate) {
-        
-        System.out.println("Bank card has been created by BankCardManagerImpl. Bank name : " + bankName + " , card number : " + cardNumber + " , create date : " + createDate);
-        return this.bankCardDao.insertBankCard(bankName, cardNumber, createDate);
-    }
-}	
-```
-	
- - @controller
-	
-```java
-// Annotated this object as a controller bean.
-@Controller("bcController")
-public class BankCardController {
-    @Autowired
-    private BankCardManager bcManager;
-    
-    public BankCardDTO createBankCard(String bankName, String cardNumber, String createDate)
-    {
-        return this.bcManager.createBankCard(bankName, cardNumber, createDate);
-    }
-}
-```
-```java
-public class TestAutowireUseAnnotation {
+package spring_ex4;
 
-    public static void main(String[] args) {
-           // Initiate Spring application context.
-        ApplicationContext springAppCtx = new ClassPathXmlApplicationContext("AutowireByAnnotationBeanSettings.xml");
-
-                // Get @Controller annotated bean by id.
-        BankCardController bcController = (BankCardController)springAppCtx.getBean("bcController");
-        
-        bcController.createBankCard("Bank Of China", "BOC888888", "2017/08/08");
-    }
-
-}	
-```
-	
-Taking another example for @autowired, @configuration
-
- - @autowired
-	
-```java
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-public class TextEditor {
-   @Autowired
-   private SpellChecker spellChecker;
-
-   public TextEditor() {
-      System.out.println("Inside TextEditor constructor." );
-   }
-   public SpellChecker getSpellChecker( ){
-      return spellChecker;
-   }
-   public void spellCheck(){
-      spellChecker.checkSpelling();
-   }
-}	
-```
-	
-```xml
-<?xml version = "1.0" encoding = "UTF-8"?>
-
-<beans xmlns = "http://www.springframework.org/schema/beans"
-   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:context = "http://www.springframework.org/schema/context"
-   xsi:schemaLocation = "http://www.springframework.org/schema/beans
-   http://www.springframework.org/schema/beans/spring-beans.xsd
-   http://www.springframework.org/schema/context
-   http://www.springframework.org/schema/context/spring-context.xsd">
-
-   <context:annotation-config/>
-
-   <!-- Definition for textEditor bean -->
-   <bean id = "textEditor" class = "io.third.TextEditor">
-   </bean>
-
-   <!-- Definition for spellChecker bean -->
-   <bean id = "spellChecker" class = "io.third.SpellChecker">
-   </bean>
-
-</beans>	
-```
-
- - @configuration
-	
-```java
-DemoManager.java and DemoManagerImpl.java
-public interface DemoManager {
-    public String getServiceName();
-}
- 
-public class DemoManagerImpl implements DemoManager
-{
-    @Override
-    public String getServiceName()
-    {
-        return "My first service with Spring 3";
-    }
-}	
-```
-	
-```java
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
- 
-import com.howtodoinjava.core.beans.DemoManager;
-import com.howtodoinjava.core.beans.DemoManagerImpl;
- 
-@Configuration
+
+//@Configuration
 public class ApplicationConfiguration {
- 
-    @Bean(name="demoService")
+	@Bean(name="demoService")
     public DemoManager helloWorld() 
     {
         return new DemoManagerImpl();
     }
-}	
+}
 ```
-	
 ```java
+package spring_ex4;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
- 
-import com.howtodoinjava.core.beans.DemoManager;
-import com.howtodoinjava.core.config.ApplicationConfiguration;
- 
-public class VerifySpringCoreFeature
+public interface DemoManager {
+	 public String getServiceName();
+}
+package spring_ex4;
+
+public class DemoManagerImpl implements DemoManager
 {
-    public static void main(String[] args)
+    public String getServiceName()
     {
-        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
- 
-        DemoManager  obj = (DemoManager) context.getBean("demoService");
- 
-        System.out.println( obj.getServiceName() );
+        return "Hello!!!!";
     }
 }
 ```
-	
- - @configuration example
-	
 ```java
-@Configuration
-public class ApplicationContextTestResourceNameType {
+package spring_ex4;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-    @Bean(name="namedFile")
-    public File namedFile() {
-        File namedFile = new File("namedFile.txt");
-        return namedFile;
-    }
-}	
+public class VerifySpringCoreFeature {
+	    public static void main(String[] args)
+	    {
+	        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+	 
+	        DemoManager  obj = (DemoManager) context.getBean("demoService");
+	 
+	        System.out.println( obj.getServiceName() );
+	    }
+}
 ```
+Output:
+```
+Addition of first and second = 4
+```
+ - @contoller
+```java
+package spring_exp4;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class SpringMainClass {
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.scan("spring_exp4");
+		context.refresh();
+		MathController ms = context.getBean(MathController.class);
+		int result = ms.add(2, 2);
+		System.out.println("Addition of first and second = " + result);
+		context.close();
+	}
+}
+```
+```java
+package spring_exp4;
+package spring_exp4;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
+
+//@Service("ms")
+@Controller
+public class MathController {
+	public int add(int x, int y) {
+		return x + y;
+	}
+}
+```
+Output:
+```
+Addition of first and second = 4
+```
+ - @Service
+```java
+package spring_exp4;
+
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Service("ms")
+//@Component
+public class MathService {
+	public int add(int x, int y) {
+		return x + y;
+	}
+}
+```
+```java
+package spring_exp4;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class SpringMainClass {
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.scan("spring_exp4");
+		context.refresh();
+		MathService ms = context.getBean(MathService.class);
+		int result = ms.add(2, 2);
+		System.out.println("Addition of first and second = " + result);
+		context.close();
+	}
+}
+```
+	
+Output:
+```
+Addition of first and second = 4
+```
+ - @Autowired
+```java
+package maths_example;
+
+import org.springframework.beans.factory.BeanFactory;
+// org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Repository;
+//import org.springframework.core.io.FileSystemResource;
+//@Repository
+public class Mainbean {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		//BeanFactory factory= new XmlBeanFactory(new FileSystemResource("spring.xml"));
+		 ApplicationContext context=new ClassPathXmlApplicationContext("spring.xml");
+		  Shape shape=(Shape)context.getBean("circle");
+		    shape.draw();
+
+	}
+
+}
+```
+```java
+package maths_example;
+
+public class Triangle implements Shape {
+	private Point PointA;
+	private Point PointB;
+	private Point PointC;
+	public Point getPointA() {
+		return PointA;
+	}
+	public void setPointA(Point pointA) {
+		PointA = pointA;
+	}
+	public Point getPointB() {
+		return PointB;
+	}
+	public void setPointB(Point pointB) {
+		PointB = pointB;
+	}
+	public Point getPointC() {
+		return PointC;
+	}
+	public void setPointC(Point pointC) {
+		PointC = pointC;
+	}
+	public void draw()
+	{
+		System.out.println("Draw triangle");
+		System.out.println(getPointA().getX()+ " "+getPointA().getY());
+		System.out.println(getPointB().getX()+ " "+getPointB().getY());
+		System.out.println(getPointC().getX()+ " "+getPointC().getY());
+	}
+	
+
+
+}
+```
+```java
+package maths_example;
+
+public interface Shape {
+	public void draw();
+
+}
+package maths_example;
+
+public class Point {
+	private int x;
+	private int y;
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+
+}
+```
+```java
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
+//@Component
+//@Repository
+public class Circle implements Shape {
+	private Point center;
+
+	public void draw()
+	{
+		System.out.println("draw circle");
+		System.out.println("circle point" +center.getX() +center.getY());
+	}
+	public Point getCenter() {
+		return center;
+	}
+
+//@Autowired
+	public void setCenter(Point center) {
+		this.center = center;
+	}
+
+}
+```
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+
+xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+<bean id = "triangle"  class="maths_example.Triangle">
+	<property name="PointA" ref="pointA"/>
+<property name="PointB" ref="pointB"/>
+<property name="PointC" ref="pointC"/>
+</bean>
+<bean id = "pointA"  class="maths_example.Point">
+<property name="x" value="0"/>
+<property name="y" value="10"/>
+</bean>
+<bean id = "pointB"  class="maths_example.Point">
+<property name="x" value="10"/>
+<property name="y" value="10"/>
+</bean>
+<bean id = "pointC"  class="maths_example.Point">
+<property name="x" value="20"/>
+<property name="y" value="10"/>
+</bean> 
+<bean id = "center"  class="maths_example.Point">
+<property name="x" value="20"/>
+<property name="y" value="10"/>
+</bean> 
+
+ <bean id = "circle"  class="maths_example.Circle">
+ <!-- <property names="center" ref="pointA"/> -->
+</bean> 
+ <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor">
+	</bean>
+
+	
+</beans>
+```
+	
+Output:
+```
+
+draw circle
+circle point2010
+```
+
 	
 5. Write a program to demonstrate use of @Resource, @inject, @Required annotations
 	
