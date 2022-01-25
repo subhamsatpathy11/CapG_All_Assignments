@@ -881,4 +881,81 @@ Verifying Resources
 Shutdown All Resources
 Closing All Resources
 ```
+
+9. Write a Java program to demonstrate Complete Bean Life cycle.
 	
+```java
+package lifecycle.beans;
+
+public class Hello 
+{
+	 public void init() throws Exception
+	    {
+	        System.out.println(
+	            "Welcome to SpringCore ");
+	    }
+	 
+	    // This method executes
+	    // when the spring container
+	    // is closed
+	    public void destroy() throws Exception
+	    {
+	        System.out.println(
+	            "Destroy method created");
+	           
+	    }
+	}
+	
+```
+
+```java
+package lifecycle.beans;
+import org.springframework
+.context
+.ConfigurableApplicationContext;
+
+import org.springframework
+.context.support
+.ClassPathXmlApplicationContext;
+public class Main {
+    public static void main(String[] args)
+        throws Exception
+    {
+ 
+        // Loading the Spring XML configuration
+        // file into the spring container and
+        // it will create the instance of
+        // the bean as it loads into container
+ 
+        ConfigurableApplicationContext cap
+            = new ClassPathXmlApplicationContext(
+                "spring9.xml");
+ 
+        // It will close the spring container
+        // and as a result invokes the
+        // destroy() method
+        cap.close();
+    }
+}
+	
+```
+	
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+
+xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="hw" class="lifecycle.beans.Hello"
+            init-method="init" destroy-method="destroy"/>
+            </beans>
+	
+```
+	
+Output:
+	
+```
+Welcome to SpringCore 
+Destroy method created
+```
