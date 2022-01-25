@@ -959,3 +959,96 @@ Output:
 Welcome to SpringCore 
 Destroy method created
 ```
+
+10. Write a java program to demonstrate ApplicationContextAware interface.
+	
+```java
+package AplicationContextAware;
+
+public class Employee {
+	private String Name;
+
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "employee [Name=" + Name + "]";
+	}
+}
+	
+```
+	
+```java
+package AplicationContextAware;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+public class AppContextAwareImpl implements ApplicationContextAware {
+	private ApplicationContext applicationContext;
+
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		// TODO Auto-generated method stub
+		System.out.println("set Application Context method is called by the spring container");
+		this.applicationContext = applicationContext;
+	}
+
+	public void displayEmployeeDetails() {
+		Employee employee = applicationContext.getBean("employee", Employee.class);
+		System.out.println("Got employee object from the applicationContext(Spring Container)=" + employee);
+
+	System.out.println("is employee object Singleton =" + applicationContext.isSingleton("employee"));
+	}
+}
+	
+```
+	
+```java
+package AplicationContextAware;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class App {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ClassPathXmlApplicationContext applicationContext= new ClassPathXmlApplicationContext("applicationContext.xml");
+		AppContextAwareImpl applicationContextAwareImpl= applicationContext.getBean("applicationContextAware",AppContextAwareImpl.class);
+         applicationContextAwareImpl.displayEmployeeDetails();
+         applicationContext.close();
+	}
+
+}
+	
+```
+	
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd">
+ 
+    <bean id="employee" class="AplicationContextAware.Employee">
+           <property name="name" value ="peter" />
+           </bean>
+     <bean id="applicationContextAware"  class="AplicationContextAware.AppContextAwareImpl"></bean>
+</beans>
+	
+```
+	
+Output:
+	
+```
+set Application Context method is called by the spring container
+Got employee object from the applicationContext(Spring Container)=employee [Name=peter]
+is employee object Singleton =true
+
+```
