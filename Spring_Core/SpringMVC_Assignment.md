@@ -630,3 +630,637 @@ xsi:schemaLocation="
 </body>
 </html>
 ```
+
+6. Apply the following server-side validations to the above registration form:
+
+ - Username should not be empty or null. 
+ - Username should be alphanumeric and between 8 to 20 characters. 
+ - Username should not contain space. 
+ - Password should not be empty or null. 
+ - Password should contain at least one upper case letter, lower-case letter, a digit or special character (S, #,, @). 
+ - Password should also be 8 to 20 characters long. • Email should not be empty or null. Email should be valid
+ - City should be selected.
+ - ZipCode should not be empty or null. It should be 6-digits.
+
+```java
+//CustomerController.java
+
+package com.controller;
+
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+
+@Controller
+public class CustomerController {
+	
+	/*@InitBinder
+	public void initBinder(WebDataBinder binder)
+	{
+		
+	}*/
+	
+	@RequestMapping(value = "/getcustomer.html", method = RequestMethod.GET)
+	public ModelAndView getForm()
+	{
+		ModelAndView model = new ModelAndView("CustomerIn");
+		return model;
+	}
+	
+	@ModelAttribute
+	public void addCommonObjects(Model model)
+	{
+		model.addAttribute("message", "Customer Got In");
+	}
+	
+	@RequestMapping(value = "/submitcustomer.html", method = RequestMethod.POST)
+	public ModelAndView acceptForm(@Valid @ModelAttribute("cust1") Customer cust1, BindingResult result)
+	{
+		if(result.hasErrors())
+		{
+			ModelAndView model = new ModelAndView("CustomerIn");
+			return model;
+		}
+		
+		ModelAndView model = new ModelAndView("CustomerOut");
+		return model;
+	}
+
+}
+```
+
+```java
+//Customer.java
+
+package com.controller;
+
+import java.util.ArrayList;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+
+public class Customer {
+	
+	@NotNull
+	@NotEmpty
+	@Pattern(regexp = "^[\\p{Alnum}]{8,20}$")
+	private String username;
+	
+	@NotNull
+	@NotEmpty
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[.@#;$]).{8,20}$")
+	private String password;
+	
+	@NotNull
+	@NotEmpty
+	private String email;
+	
+
+	private String contact;
+	
+	@NotNull
+	@NotEmpty
+	@Size(min = 6, max = 6)
+	private Long zip;
+	
+	@NotEmpty
+	private ArrayList<String> city;
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getContact() {
+		return contact;
+	}
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	public Long getZip() {
+		return zip;
+	}
+	public void setZip(Long zip) {
+		this.zip = zip;
+	}
+	public ArrayList<String> getCity() {
+		return city;
+	}
+	public void setCity(ArrayList<String> city) {
+		this.city = city;
+	}
+
+}
+```
+
+```jsp
+<!--CustomerIn.jsp-->
+
+<html>
+<body>
+	
+	<form:errors path = "cust1.*/"/>
+	
+	<form action = "/AssignmentQ6/submitcustomer.html" method = "post">
+	
+		<p> Username : <input type = "text" name = "username"/></p>
+		<p> Password : <input type = "password" name = "password"/></p>
+		<p> Email : <input type = "email" name = "email"/></p>
+		<p> Contact : <input type = "text" name = "contact"/></p>
+		<p> City : <select name="city">
+    		<option value="Bhubaneswar">Bhubaneswar</option>
+    		<option value="Mysore">Mysore</option>
+    		<option value="Balasore">Balasore</option>
+    		<option value="New york">New York</option>
+  		</select></p>
+		<p> Zip Code : <input type = "number" name = "zip"/></p>
+		<input type = "submit" value = "Submit"/>
+	
+	</form>
+
+</body>
+</html>
+```
+
+```jsp
+<!--CustomerOut.jsp-->
+
+<html>
+<body>
+	<h2>${message}</h2>
+	
+	<table>
+	
+	<tr>
+		<td>User name : </td>
+		<td>${cust1.username}</td>
+	</tr>
+	<tr>
+		<td>Email : </td>
+		<td>${cust1.email}</td>
+	</tr>
+	
+	<tr>
+		<td>Contact : </td>
+		<td>${cust1.contact}</td>
+	</tr>
+	
+	<tr>
+		<td>City : </td>
+		<td>${cust1.city}</td>
+	</tr>
+	
+	<tr>
+		<td>Zip Code : </td>
+		<td>${cust1.zip}</td>
+	</tr>
+	</table>
+</body>
+</h
+```
+
+```xml
+<!--web.xml-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>SpringMVC</display-name>
+ 
+ <servlet>
+ 	<servlet-name>spring-dispatcher</servlet-name>
+ 		<servlet-class>
+ 			org.springframework.web.servlet.DispatcherServlet
+ 		</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+ 	<servlet-name>spring-dispatcher</servlet-name>
+ 	<url-pattern>/</url-pattern>
+ </servlet-mapping>
+ 
+ 
+</web-app>
+```
+
+```xml
+<!--servlet-dispatcher.xml-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:mvc="http://www.springframework.org/schema/mvc" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="
+    http://www.springframework.org/schema/beans     
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+
+
+   <mvc:annotation-driven/>	
+   <context:component-scan base-package = "com.controller"/>
+ 
+ 
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name = "prefix">
+            <value>/WEB-INF/</value>
+        </property>
+          <property name = "suffix">
+              <value>.jsp</value>
+          </property>
+    </bean> 
+</beans>
+```
+
+7. Add custom validations in the above example.
+
+ - Contact should be only numeric and exactly 10-digits.
+
+In continuation with the above code;
+
+```java
+//IsNumeric.java
+
+package com.controller;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
+
+import net.sourceforge.retroweaver.runtime.java.lang.annotation.Documented;
+import net.sourceforge.retroweaver.runtime.java.lang.annotation.ElementType;
+import net.sourceforge.retroweaver.runtime.java.lang.annotation.Retention;
+import net.sourceforge.retroweaver.runtime.java.lang.annotation.RetentionPolicy;
+import net.sourceforge.retroweaver.runtime.java.lang.annotation.Target;
+
+@Documented
+@Constraint(validatedBy = Numeric.class)
+@Target( { ElementType.FIELD } )
+@Retention( RetentionPolicy.RUNTIME)
+public @interface IsNumeric {
+	
+	String message() default "Not Numeric" + 
+			"Please enter a numeric value";
+
+	Class<?>[] groups() default {};
+	
+	Class<? extends Payload>[] payload() default {};
+}
+
+```
+
+```java
+//Numeric.java
+
+package com.controller;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+
+public class Numeric implements ConstraintValidator<IsNumeric, String> {
+
+	private static final String CONTACT_PATTERN = "((?=.*\\d).{10,10})";
+	private Pattern pattern;
+	private Matcher matcher;
+	
+	public Numeric()
+	{
+		pattern = Pattern.compile(CONTACT_PATTERN);
+	}
+	
+	@Override
+	public void initialize(IsNumeric isNumeric)
+	{
+		isNumeric.message();
+	}
+	
+	@Override
+	public boolean isValid(String contact, ConstraintValidatorContext arg1) {
+		
+		if(contact == null)
+		{
+			return false;
+		}
+		
+		matcher = pattern.matcher(contact);
+		return matcher.matches();
+	}
+
+}
+
+```
+
+```java
+//Customer.java
+
+package com.controller;
+
+import java.util.ArrayList;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+
+public class Customer {
+	
+	@NotNull
+	@NotEmpty
+	@Pattern(regexp = "^[\\p{Alnum}]{8,20}$")
+	private String username;
+	
+	@NotNull
+	@NotEmpty
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[.@#;$]).{8,20}$")
+	private String password;
+	
+	@NotNull
+	@NotEmpty
+	private String email;
+	
+	//using custom annotation
+	@IsNumeric
+	private String contact;
+	
+	@NotNull
+	@NotEmpty
+	@Size(min = 6, max = 6)
+	private Long zip;
+	
+	@NotEmpty
+	private ArrayList<String> city;
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getContact() {
+		return contact;
+	}
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+	public Long getZip() {
+		return zip;
+	}
+	public void setZip(Long zip) {
+		this.zip = zip;
+	}
+	public ArrayList<String> getCity() {
+		return city;
+	}
+	public void setCity(ArrayList<String> city) {
+		this.city = city;
+	}
+
+}
+
+```
+
+8. Design and develop a Spring MVC web application as follows:
+
+ - Create a login.jsp page.
+ - When user clicks on the French or Vietnam, page text should be changed to selected Locale:
+
+```java
+//LanguageController.java
+
+package com.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class LanguageController {
+	
+	@RequestMapping(value = "/getpage.html", method = RequestMethod.GET)
+	public ModelAndView getForm()
+	{
+		ModelAndView model = new ModelAndView("LoginPage");
+		return model;
+	}
+	
+	@RequestMapping(value = "/output.html", method = RequestMethod.POST)
+	public ModelAndView acceptForm(@ModelAttribute("user1") UserDetails user1, BindingResult result)
+	{
+		if(result.hasErrors())
+		{
+			ModelAndView model = new ModelAndView("LoginPage");
+			return model;
+		}
+		
+		ModelAndView model = new ModelAndView("ResultPage");
+		return model;
+	}
+
+}
+```
+
+```java
+//UserDetails.java
+
+package com.controller;
+
+public class UserDetails {
+	
+	private String username;
+	private String password;
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+
+}
+
+```
+
+```xml
+<!--web.xml-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>SpringMVC</display-name>
+ 
+ <servlet>
+ 	<servlet-name>spring-dispatcher</servlet-name>
+ 		<servlet-class>
+ 			org.springframework.web.servlet.DispatcherServlet
+ 		</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+ 	<servlet-name>spring-dispatcher</servlet-name>
+ 	<url-pattern>/</url-pattern>
+ </servlet-mapping>
+ 
+ 
+</web-app>
+```
+
+```xml
+<!--spring-servlet-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:mvc="http://www.springframework.org/schema/mvc" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="
+    http://www.springframework.org/schema/beans     
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+
+
+   <mvc:annotation-driven/>	
+   <context:component-scan base-package = "com.controller"/>
+ 
+   <mvc:interceptors>
+   
+   		<bean class = "org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+   			<property name = "paramName" value="siteLanguage" />	
+   		</bean>
+   
+   </mvc:interceptors>
+ 
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name = "prefix">
+            <value>/WEB-INF/</value>
+        </property>
+          <property name = "suffix">
+              <value>.jsp</value>
+          </property>
+    </bean> 
+    
+    <bean id = "messageSource"
+    		class = "org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    		<property name="basename" value = "/WEB-INF/studentmessages" />
+    
+    </bean>
+    
+    <bean id = "localeResolver"
+    	class = "org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+</beans>
+```
+
+```properties
+//studentmessages_en.properties
+
+label.username = Username
+label.password = Password
+```
+
+```properties
+//studentmessages_fr.properties
+
+label.username = Nom d'utilisateur
+label.password = le mot de passe
+```
+
+```properties
+//studentmessages_vt.properties
+
+label.username = m\u1EADt kh\u1EA9u m\u1EDF khóa
+label.password = tên tài kho\u1EA3n
+```
+
+```jsp
+<!--LoginPage.jsp-->
+
+<%@ taglib prefix = "form" uri = "http://www.springframework.org/tags/form" %>
+<%@ taglib prefix = "spring" uri = "http://www.springframework.org/tags" %>
+
+<html>
+<body>
+
+	<a href = "/Assignment8/getpage.html?siteLanguage=en">(Login)English</a> | 
+	<a href = "/Assignment8/getpage.html?siteLanguage=fr">(Login)French</a> | 
+	<a href = "/Assignment8/getpage.html?siteLanguage=vt">(Login)Vietenames</a>
+	
+	<form:errors path = "user1.*/"/>
+	
+	<form action = "/Assignment8/output.html" method = "post">
+	
+		<p> <spring:message code = "label.username" /> : <input type = "text" name = "username"/></p>
+		<p> <spring:message code = "label.password" />: <input type = "password" name = "password"/></p>
+		<input type = "submit" value = "Submit"/>
+	
+	</form>
+
+</body>
+</html>
+```
+
+9. Design and develop a Spring MVC web application as follows:
+
+ - Create index.jsp page which contains one hyperlink as shown below
+ - Develop EmployeeController class that returns showAll Employees view which displays only first 5 records and links to other pages that show further employee details.
+ - Create showAll Employees.jsp
+ - Develop controller, service, repository layers and domain model classes.
+
+```java
+
+```
